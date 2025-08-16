@@ -145,23 +145,7 @@ const bitcoindChecks: Array<Check> = [
       config.advanced.peers.listen = true
     },
   },
-  {
-    currentError(config) {
-      if (!matchBitcoindConfig.test(config)) {
-        return 'Config is not the correct shape'
-      }
-      if (config.advanced.pruning.mode !== 'disabled') {
-        return 'Pruning must be disabled (must be an archival node)'
-      }
-      return
-    },
-    fix(config) {
-      if (!matchBitcoindConfig.test(config)) {
-        return
-      }
-      config.advanced.pruning.mode = 'disabled'
-    },
-  },
+  // Note: Removed archival node requirement - allowing pruned nodes
 ]
 
 export const dependencies: T.ExpectedExports.dependencies = {
