@@ -1,5 +1,5 @@
 PACKAGE_ID := $(shell grep -o "id: '[^']*'" startos/manifest.ts | sed "s/id: '\([^']*\)'/\1/")
-INGREDIENTS := $(shell start-sdk s9pk list-ingredients 2> /dev/null)
+INGREDIENTS := javascript/index.js Dockerfile manifest.js $(shell find startos -name "*.ts" 2> /dev/null)
 
 .PHONY: all clean install check-deps check-init ingredients
 
@@ -29,7 +29,7 @@ ingredients: $(INGREDIENTS)
 
 ${PACKAGE_ID}.s9pk: $(INGREDIENTS) | check-deps check-init
 	@$(MAKE) --no-print-directory ingredients
-	start-sdk s9pk pack
+	start-sdk pack
 
 javascript/index.js: $(shell git ls-files startos) tsconfig.json node_modules package.json
 	npm run build
@@ -52,4 +52,4 @@ install: | check-deps check-init ${PACKAGE_ID}.s9pk
 	@if [ ! -f ~/.startos/config.yaml ]; then echo "You must define \"host: http://server-name.local\" in ~/.startos/config.yaml config file first."; exit 1; fi
 	@echo "\nInstalling to $$(grep -v '^#' ~/.startos/config.yaml | cut -d'/' -f3) ...\n"
 	@[ -f $(PACKAGE_ID).s9pk ] || ( $(MAKE) && echo "\nInstalling to $$(grep -v '^#' ~/.startos/config.yaml | cut -d'/' -f3) ...\n" )
-	@start-sdk package install -s $(PACKAGE_ID).s9pk
+	@start-sdk publish http://localhost:9090 $(PACKAGE_ID).s9pk
