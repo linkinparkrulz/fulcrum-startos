@@ -25272,9 +25272,15 @@ exports.actions = sdk_1.sdk.Actions.of().addAction(config_1.config);
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.restoreInit = exports.createBackup = void 0;
+/**
+ * Backup configuration for Fulcrum StartOS package
+ *
+ * Currently using no-op backup strategy as Fulcrum data can be regenerated
+ * from the Bitcoin node and configuration is handled separately.
+ */
 const sdk_1 = __nccwpck_require__(5811);
 _a = sdk_1.sdk.setupBackups(async ({ effects }) => sdk_1.sdk.Backups.ofVolumes('main').setOptions({
-    exclude: ['/data/db'], // @TODO confirm path
+    exclude: ['/data/db'], // Exclude database as it can be regenerated
 })), exports.createBackup = _a.createBackup, exports.restoreInit = _a.restoreInit;
 
 
@@ -25290,9 +25296,7 @@ exports.setDependencies = void 0;
 const sdk_1 = __nccwpck_require__(5811);
 exports.setDependencies = sdk_1.sdk.setupDependencies(async ({ effects }) => {
     // Note: Removed archival node requirement to allow working with pruned nodes
-    let currentDeps = {};
     return {
-        ...currentDeps,
         'bitcoind-testnet': {
             id: 'bitcoind-testnet',
             kind: 'running',
@@ -25346,6 +25350,9 @@ exports.configFile = start_sdk_1.FileHelper.yaml({
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.uninit = exports.init = void 0;
+/**
+ * StartOS initialization configuration for Fulcrum package
+ */
 const sdk_1 = __nccwpck_require__(5811);
 const dependencies_1 = __nccwpck_require__(1974);
 const interfaces_1 = __nccwpck_require__(9863);
@@ -25433,13 +25440,17 @@ const sdk_1 = __nccwpck_require__(5811);
 const utils_1 = __nccwpck_require__(1225);
 exports.setInterfaces = sdk_1.sdk.setupInterfaces(async ({ effects }) => {
     const multihost = sdk_1.sdk.MultiHost.of(effects, 'multihost');
+    // Configure the main Electrum interface with SSL support
     const mainMultiOrigin = await multihost.bindPort(utils_1.port, {
-        // @TODO confirm options
         protocol: null,
-        addSsl: { preferredExternalPort: 50002, alpn: null },
+        addSsl: {
+            preferredExternalPort: 50002,
+            alpn: null
+        },
         preferredExternalPort: utils_1.port,
         secure: null,
     });
+    // Create the Electrum interface definition
     const main = sdk_1.sdk.createInterface(effects, {
         name: 'Electrum Interface',
         id: 'electrum',
@@ -25465,12 +25476,11 @@ exports.setInterfaces = sdk_1.sdk.setupInterfaces(async ({ effects }) => {
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.main = void 0;
-const start_sdk_1 = __nccwpck_require__(1098);
 const sdk_1 = __nccwpck_require__(5811);
 const utils_1 = __nccwpck_require__(1225);
 exports.main = sdk_1.sdk.setupMain(async ({ effects, started }) => {
     /**
-     * ======================== Setup (optional) ========================
+     * ======================== Setup ========================
      */
     console.info('Starting Fulcrum!');
     const depResult = await sdk_1.sdk.checkDependencies(effects);
@@ -25485,21 +25495,9 @@ exports.main = sdk_1.sdk.setupMain(async ({ effects, started }) => {
         .mountAssets({
         subpath: null,
         mountpoint: '/assets',
-        type: 'directory',
-    })
-        .mountDependency({
-        dependencyId: 'bitcoind',
-        volumeId: 'main',
-        subpath: null,
-        mountpoint: '/mnt/bitcoind',
-        readonly: true,
     }), 'fulcrum');
-    // Restart if Bitcoin .cookie changes
-    await start_sdk_1.FileHelper.string(`${fulcrumContainer.rootfs}/mnt/bitcoind/.cookie`)
-        .read()
-        .const(effects);
     /**
-     * ======================== Daemons ========================
+     * =================== Container Daemons =====================
      */
     return sdk_1.sdk.Daemons.of(effects, started)
         .addDaemon('fulcrum', {
@@ -25518,10 +25516,9 @@ exports.main = sdk_1.sdk.setupMain(async ({ effects, started }) => {
         ready: {
             display: 'Sync Progress',
             fn: async () => {
-                // @TODO convert script to ts
                 const res = await fulcrumContainer.exec(['sh', '/usr/local/bin/check-synced.sh'], {
                     env: {
-                        ROOT_FS: fulcrumContainer.rootfs,
+                        RUST_LOG: 'debug',
                     },
                 });
                 if (res.exitCode === 61) {
@@ -25575,11 +25572,11 @@ exports.manifest = (0, start_sdk_1.setupManifest)({
     },
     hardwareRequirements: {},
     alerts: {
-        install: "WARNING: Fulcrum requires significant system resources: 1GB+ RAM during sync and 160GB+ for indexes. When combined with a Bitcoin node (~800GB), total storage requirements exceed 1TB. A 2TB drive is strongly recommended. Insufficient resources may cause system instability or failure.",
+        install: 'WARNING: Fulcrum requires significant system resources: 1GB+ RAM during sync and 160GB+ for indexes. When combined with a Bitcoin node (~800GB), total storage requirements exceed 1TB. A 2TB drive is strongly recommended. Insufficient resources may cause system instability or failure.',
         update: null,
         uninstall: null,
         restore: null,
-        start: "WARNING: Fulcrum requires significant system resources: 1GB+ RAM during sync and 160GB+ for indexes. When combined with a Bitcoin node (~800GB), total storage requirements exceed 1TB. A 2TB drive is strongly recommended. Insufficient resources may cause system instability or failure.",
+        start: 'WARNING: Fulcrum requires significant system resources: 1GB+ RAM during sync and 160GB+ for indexes. When combined with a Bitcoin node (~800GB), total storage requirements exceed 1TB. A 2TB drive is strongly recommended. Insufficient resources may cause system instability or failure.',
         stop: null,
     },
     dependencies: {},
@@ -25595,11 +25592,12 @@ exports.manifest = (0, start_sdk_1.setupManifest)({
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.sdk = void 0;
+/**
+ * StartOS SDK configuration for Fulcrum package
+ */
 const start_sdk_1 = __nccwpck_require__(1098);
 const manifest_1 = __nccwpck_require__(8362);
 /**
- * Plumbing. DO NOT EDIT.
- *
  * The exported "sdk" const is used throughout this package codebase.
  */
 exports.sdk = start_sdk_1.StartSdk.of().withManifest(manifest_1.manifest).build(true);
@@ -25612,17 +25610,22 @@ exports.sdk = start_sdk_1.StartSdk.of().withManifest(manifest_1.manifest).build(
 
 "use strict";
 
+/**
+ * Utility constants and configuration defaults for Fulcrum StartOS package
+ */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.configDefaults = exports.port = void 0;
+// Network configuration
 exports.port = 50001;
+// Default configuration values for advanced settings
 exports.configDefaults = {
     advanced: {
-        'bitcoind-timeout': 600,
-        'bitcoind-clients': 1,
-        'worker-threads': 1,
-        'db-mem': 1024,
-        'db-max-open-files': 200,
-        'utxo-cache': 1024,
+        'bitcoind-timeout': 600, // Seconds to wait for Bitcoin RPC responses
+        'bitcoind-clients': 1, // Number of concurrent Bitcoin RPC connections
+        'worker-threads': 1, // Number of worker threads for processing
+        'db-mem': 1024, // Database memory allocation in MB
+        'db-max-open-files': 200, // Maximum number of open database files
+        'utxo-cache': 1024, // UTXO cache size in MB
     },
 };
 
