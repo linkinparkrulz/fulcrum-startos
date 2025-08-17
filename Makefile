@@ -27,10 +27,8 @@ check-init:
 ingredients: $(INGREDIENTS)
 	@echo "Re-evaluating ingredients..."
 
-Fulcrum/LICENSE.txt:
-	git submodule update --init --recursive
 
-${PACKAGE_ID}.s9pk: $(INGREDIENTS) | check-deps check-init Fulcrum/LICENSE.txt
+${PACKAGE_ID}.s9pk: $(INGREDIENTS) | check-deps check-init 
 	@$(MAKE) --no-print-directory ingredients
 	start-cli s9pk pack
 
