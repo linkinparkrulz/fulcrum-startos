@@ -24,11 +24,16 @@ check-init:
 		start-cli s9pk init; \
 	fi
 
+Fulcrum/LICENSE.txt:
+	git submodule update --init --recursive
+
+LICENSE: Fulcrum/LICENSE.txt
+	@# Ensure LICENSE symlink can resolve to Fulcrum submodule
+
 ingredients: $(INGREDIENTS)
 	@echo "Re-evaluating ingredients..."
 
-
-${PACKAGE_ID}.s9pk: $(INGREDIENTS) | check-deps check-init 
+${PACKAGE_ID}.s9pk: $(INGREDIENTS) | check-deps check-init LICENSE 
 	@$(MAKE) --no-print-directory ingredients
 	start-cli s9pk pack
 
