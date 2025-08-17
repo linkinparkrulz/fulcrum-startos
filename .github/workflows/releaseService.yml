@@ -26,8 +26,8 @@ jobs:
       - name: Setting package ID and title from the manifest
         id: package
         run: |
-          echo "package_id=$(yq -oy ".id" manifest.*)" >> $GITHUB_ENV
-          echo "package_title=$(yq -oy ".title" manifest.*)" >> $GITHUB_ENV
+          echo "package_id=$(start-cli s9pk inspect *.s9pk manifest | jq -r '.id')" >> $GITHUB_ENV
+          echo "package_title=$(start-cli s9pk inspect *.s9pk manifest | jq -r '.title')" >> $GITHUB_ENV
         shell: bash
 
       - name: Generate sha256 checksum
@@ -41,7 +41,7 @@ jobs:
         run: |
           PACKAGE_ID=${{ env.package_id }}
           echo "## What's Changed" > change-log.txt
-          yq -oy '.release-notes' manifest.* >> change-log.txt
+          start-cli s9pk inspect *.s9pk manifest | jq -r '.releaseNotes' >> change-log.txt
           echo "## SHA256 Hash" >> change-log.txt
           echo '```' >> change-log.txt
           sha256sum ${PACKAGE_ID}.s9pk >> change-log.txt
@@ -68,5 +68,5 @@ jobs:
           if [[ -z "$S9USER" || -z "$S9PASS" || -z "$S9REGISTRY" ]]; then
             echo "Publish skipped: missing registry credentials."
           else
-            start-sdk publish https://$S9USER:$S9PASS@$S9REGISTRY ${{ env.package_id }}.s9pk
+            start-cli registry package add ${{ env.package_id }}.s9pk https://$S9USER:$S9PASS@$S9REGISTRY
           fi
