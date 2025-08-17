@@ -21,7 +21,7 @@ check-deps:
 
 check-init:
 	@if [ ! -f ~/.startos/developer.key.pem ]; then \
-		start-cli s9pk init; \
+		start-cli init; \
 	fi
 
 Fulcrum/LICENSE.txt:
