@@ -24,8 +24,8 @@ RUN dpkg --add-architecture ${TARGETARCH} && \
 
 WORKDIR /src
 
-RUN git clone --branch v2.0.0-pre1 --depth 1 https://github.com/cculianu/Fulcrum.git . && \
-    git checkout v2.0.0-pre1
+RUN git clone --branch v2.0.0 --depth 1 https://github.com/cculianu/Fulcrum.git . && \
+    git checkout v2.0.0
 
 RUN export CXXFLAGS="-std=c++20" && \
     export CC=${ARCH}-linux-gnu-gcc && \
