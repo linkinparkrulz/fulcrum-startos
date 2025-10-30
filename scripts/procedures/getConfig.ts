@@ -77,20 +77,14 @@ export const getConfig: T.ExpectedExports.getConfig = compat.getConfig({
     description:
       'Custom banner text displayed to connecting clients. Supports variable substitutions like $SERVER_VERSION and $DONATION_ADDRESS.',
     nullable: false,
-    default: `
- ███████╗██████╗ ███████╗███████╗    ███████╗ █████╗ ███╗   ███╗ ██████╗ ██╗   ██╗██████╗  █████╗ ██╗
+    default: `███████╗██████╗ ███████╗███████╗    ███████╗ █████╗ ███╗   ███╗ ██████╗ ██╗   ██╗██████╗  █████╗ ██╗
  ██╔════╝██╔══██╗██╔════╝██╔════╝    ██╔════╝██╔══██╗████╗ ████║██╔═══██╗██║   ██║██╔══██╗██╔══██╗██║
  █████╗  ██████╔╝█████╗  █████╗      ███████╗███████║██╔████╔██║██║   ██║██║   ██║██████╔╝███████║██║
  ██╔══╝  ██╔══██╗██╔══╝  ██╔══╝      ╚════██║██╔══██║██║╚██╔╝██║██║   ██║██║   ██║██╔══██╗██╔══██║██║
  ██║     ██║  ██║███████╗███████╗    ███████║██║  ██║██║ ╚═╝ ██║╚██████╔╝╚██████╔╝██║  ██║██║  ██║██║
  ╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝    ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝
 
-Welcome to your FreeSamourai Fulcrum Server!
-Connected to $SERVER_VERSION
-Running on Bitcoin network with enhanced privacy features.
-
-For support and updates: https://freesamourai.com
-`,
+For support and updates: https://freesamourai.com`,
     textarea: true,
   },
   advanced: {
