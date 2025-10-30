@@ -35,6 +35,7 @@ fn parse_quick_connect_url(url: Uri) -> Result<(String, String, String, u16), an
 #[serde(rename_all = "kebab-case")]
 struct Config {
     bitcoind: BitcoinCoreConfig,
+    banner: String,
     advanced: AdvancedConfig,
 }
 
@@ -200,6 +201,12 @@ fn main() -> Result<(), anyhow::Error> {
             db_max_open_files = db_max_open_files,
             utxo_cache = utxo_cache,
         )?;
+    }
+
+    // Create banner file
+    {
+        let mut banner_file = File::create("/data/banner.txt")?;
+        banner_file.write_all(config.banner.as_bytes())?;
     }
 
     Ok(())
