@@ -56,4 +56,14 @@ data:
 EOF
 
 configurator
-exec tini -p SIGTERM -- Fulcrum /data/fulcrum.conf | tee /data/fulcrum.log
+
+# Check if this is an upgrade from Fulcrum 1.x to 2.0 and add --db-upgrade flag if needed
+FULCRUM_ARGS=""
+if [ -d "/data/db" ] && [ ! -f "/data/.fulcrum-2.0-upgraded" ]; then
+    echo "Detected existing Fulcrum 1.x database. Adding --db-upgrade flag for one-time upgrade to 2.0 format."
+    FULCRUM_ARGS="--db-upgrade"
+    # Create marker file to prevent running upgrade again
+    touch /data/.fulcrum-2.0-upgraded
+fi
+
+exec tini -p SIGTERM -- Fulcrum $FULCRUM_ARGS /data/fulcrum.conf | tee /data/fulcrum.log
