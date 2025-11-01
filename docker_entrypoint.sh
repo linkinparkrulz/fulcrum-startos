@@ -58,12 +58,31 @@ EOF
 configurator
 
 # Check if this is an upgrade from Fulcrum 1.x to 2.0 and add --db-upgrade flag if needed
+echo "DEBUG: Checking for database upgrade..."
+echo "DEBUG: /data/db exists: $([ -d "/data/db" ] && echo "YES" || echo "NO")"
+echo "DEBUG: /data/headers exists: $([ -f "/data/headers" ] && echo "YES" || echo "NO")"
+echo "DEBUG: /data/txnum2txhash exists: $([ -f "/data/txnum2txhash" ] && echo "YES" || echo "NO")"
+echo "DEBUG: Marker file exists: $([ -f "/data/.fulcrum-2.0-upgraded" ] && echo "YES" || echo "NO")"
+ls -la /data/ || echo "DEBUG: /data directory listing failed"
+
 FULCRUM_ARGS=""
-if [ -d "/data/db" ] && [ ! -f "/data/.fulcrum-2.0-upgraded" ]; then
-    echo "Detected existing Fulcrum 1.x database. Adding --db-upgrade flag for one-time upgrade to 2.0 format."
+# Check for Fulcrum 1.x database files (headers, txnum2txhash, etc.) in /data root
+if ([ -f "/data/headers" ] || [ -f "/data/txnum2txhash" ] || [ -d "/data/db" ]) && [ ! -f "/data/.fulcrum-2.0-upgraded" ]; then
+    echo "DEBUG: Detected existing Fulcrum 1.x database files. Adding --db-upgrade flag for one-time upgrade to 2.0 format."
     FULCRUM_ARGS="--db-upgrade"
     # Create marker file to prevent running upgrade again
     touch /data/.fulcrum-2.0-upgraded
+    echo "DEBUG: Created marker file /data/.fulcrum-2.0-upgraded"
+else
+    echo "DEBUG: No database upgrade needed"
 fi
 
-exec tini -p SIGTERM -- Fulcrum $FULCRUM_ARGS /data/fulcrum.conf | tee /data/fulcrum.log
+# Execute Fulcrum with proper argument order
+echo "DEBUG: FULCRUM_ARGS='$FULCRUM_ARGS'"
+if [ -n "$FULCRUM_ARGS" ]; then
+    echo "DEBUG: Executing: Fulcrum $FULCRUM_ARGS /data/fulcrum.conf"
+    exec tini -p SIGTERM -- Fulcrum $FULCRUM_ARGS /data/fulcrum.conf | tee /data/fulcrum.log
+else
+    echo "DEBUG: Executing: Fulcrum /data/fulcrum.conf"
+    exec tini -p SIGTERM -- Fulcrum /data/fulcrum.conf | tee /data/fulcrum.log
+fi
