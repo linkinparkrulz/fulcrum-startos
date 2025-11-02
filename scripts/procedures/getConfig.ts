@@ -74,15 +74,14 @@ export const getConfig: T.ExpectedExports.getConfig = compat.getConfig({
   banner: {
     type: 'string',
     name: 'Server Banner',
-    rows: 50,
     description:
       'Custom banner text displayed to connecting clients. Supports variable substitutions like $SERVER_VERSION and $DONATION_ADDRESS.',
-    nullable: false,
+    nullable: true,
     default: `
 
 
-█▀▀ █▀█ █▀▀ █▀▀   █▀ ▄▀█ █▀▄▀█ █▀█ █░█ █▀█ ▄▀█ █
-█▀░ █▀▄ ██▄ ██▄   ▄█ █▀█ █░▀░█ █▄█ █▄█ █▀▄ █▀█ █
+█▀▀ █▀█ █▀▀ █▀▀   █▀ ▄▀█ █▀▄▀█ █▀█ █░█ █▀█ ▄▀█ █
+█▀░ █▀▄ ██▄ ██▄   ▄█ █▀█ █░▀░█ █▄█ █▄█ █▀▄ █▀█ █
 
 Welcome to your Fulcrum Server!
 Connected to $SERVER_VERSION

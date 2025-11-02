@@ -35,7 +35,7 @@ fn parse_quick_connect_url(url: Uri) -> Result<(String, String, String, u16), an
 #[serde(rename_all = "kebab-case")]
 struct Config {
     bitcoind: BitcoinCoreConfig,
-    banner: String,
+    banner: Option<String>,
     advanced: AdvancedConfig,
 }
 
@@ -206,7 +206,18 @@ fn main() -> Result<(), anyhow::Error> {
     // Create banner file
     {
         let mut banner_file = File::create("/data/banner.txt")?;
-        banner_file.write_all(config.banner.as_bytes())?;
+        let banner_text = config.banner.unwrap_or_else(|| {
+            r#"
+
+
+█▀▀ █▀█ █▀▀ █▀▀   █▀ ▄▀█ █▀▄▀█ █▀█ █░█ █▀█ ▄▀█ █
+█▀░ █▀▄ ██▄ ██▄   ▄█ █▀█ █░▀░█ █▄█ █▄█ █▀▄ █▀█ █
+
+Welcome to your Fulcrum Server!
+Connected to $SERVER_VERSION
+For information and updates: https://freesamourai.com"#.to_string()
+        });
+        banner_file.write_all(banner_text.as_bytes())?;
     }
 
     Ok(())
