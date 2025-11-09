@@ -154,13 +154,10 @@ fn main() -> Result<(), anyhow::Error> {
             );
         }
 
-        let mut worker_threads: String = "".to_string();
-        if config.advanced.worker_threads.is_some() {
-            worker_threads = format!(
-                "worker_threads = {}",
-                config.advanced.worker_threads.unwrap()
-            );
-        }
+        let worker_threads = format!(
+            "worker_threads = {}",
+            config.advanced.worker_threads.unwrap_or(0)
+        );
 
         let mut db_mem: String = "".to_string();
         if config.advanced.db_mem.is_some() {

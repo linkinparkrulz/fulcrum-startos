@@ -117,10 +117,10 @@ For information and updates: https://freesamourai.com`,
       },
       'worker-threads': {
         type: 'number',
-        name: 'Worker Threads',
+        name: 'Worker Threads (leave empty for automatic)',
         description:
           'https://github.com/cculianu/Fulcrum/blob/v2.0.0/doc/fulcrum-example-config.conf#L985',
-        nullable: false,
+        nullable: true,
         range: '[0,*)',
         integral: true,
         units: 'threads',
