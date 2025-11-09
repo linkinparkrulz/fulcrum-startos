@@ -22,9 +22,8 @@ if [ "$1" = "Fulcrum" ] ; then
   set -- "$@" -D "$DATA_DIR" -c "$SSL_CERTFILE" -k "$SSL_KEYFILE"
 fi
 
-# todo
-# echo 'db/' > /data/.backupignore
-# echo 'core' >> /data/.backupignore
+# ignore database files for backups
+echo 'fulc2_db/' > /data/.backupignore
 
 TOR_ADDRESS=$(yq '.electrum-tor-address' /data/start9/config.yaml)
 
