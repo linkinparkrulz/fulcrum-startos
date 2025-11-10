@@ -1,10 +1,14 @@
 # Fulcrum
 
-A fast & nimble SPV server for Bitcoin Cash, Bitcoin BTC, and Litecoin.
+Is a fast and efficient Electrum server that connects to your node, allowing you to use your favorite wallets without relying on public servers.
 
 ## Configuration
 
-Select your Bitcoin node as a backend. Currently, Bitcoin Core is supported, with options for mainnet or testnet.
+1. Choose your preferred Bitcoin node to serve as the backend. Fulcrum is compatible with both Bitcoin Core and Bitcoin Knots for the mainchain. Additionally, a Bitcoin Core (testnet4) option is available for testing purposes.
+
+2. You can customize the text banner that is displayed to clients when they connect to your Fulcrum server. This banner supports variable substitutions, such as `$SERVER_VERSION` and `$DONATION_ADDRESS`, allowing for dynamic information to be presented.
+
+3. There is an "Advanced" section for configuration. The default settings are recommended for most users and have been optimized for typical use cases. Adjust these only if you have specific performance tuning requirements.
 
 ## Usage
 

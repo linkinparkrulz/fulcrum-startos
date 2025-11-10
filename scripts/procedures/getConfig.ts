@@ -3,7 +3,7 @@ import { compat, types as T } from '../deps.ts'
 export const getConfig: T.ExpectedExports.getConfig = compat.getConfig({
   'electrum-tor-address': {
     name: 'Electrum Tor Address',
-    description: 'The Tor address for the electrum interface.',
+    description: 'The Tor address for the Electrum interface.',
     type: 'pointer',
     subtype: 'package',
     'package-id': 'fulcrum',
@@ -13,13 +13,13 @@ export const getConfig: T.ExpectedExports.getConfig = compat.getConfig({
   bitcoind: {
     type: 'union',
     name: 'Bitcoin Node',
-    description: 'The Bitcoin node type you would like to use for Dojo',
+    description: 'The Bitcoin node type you would like to use for Fulcrum',
     tag: {
       id: 'type',
       name: 'Select Bitcoin Node',
       'variant-names': {
-        bitcoind: 'Bitcoin Core',
-        'bitcoind-testnet': 'Bitcoin Core (testnet4)',
+        bitcoind: 'Bitcoin (mainnet)',
+        'bitcoind-testnet': 'Bitcoin (testnet4)',
       },
       description: 'The Bitcoin node type you would like to use for Fulcrum',
     },
@@ -29,7 +29,7 @@ export const getConfig: T.ExpectedExports.getConfig = compat.getConfig({
         username: {
           type: 'pointer',
           name: 'RPC Username',
-          description: "The username for Bitcoin Core's RPC interface",
+          description: "The username for Bitcoin's RPC interface",
           subtype: 'package',
           'package-id': 'bitcoind',
           target: 'config',
@@ -39,7 +39,7 @@ export const getConfig: T.ExpectedExports.getConfig = compat.getConfig({
         password: {
           type: 'pointer',
           name: 'RPC Password',
-          description: "The password for Bitcoin Core's RPC interface",
+          description: "The password for Bitcoin's RPC interface",
           subtype: 'package',
           'package-id': 'bitcoind',
           target: 'config',
@@ -78,8 +78,6 @@ export const getConfig: T.ExpectedExports.getConfig = compat.getConfig({
       'Custom banner text displayed to connecting clients. Supports variable substitutions like $SERVER_VERSION and $DONATION_ADDRESS.',
     nullable: true,
     default: `
-
-
 █▀▀ █▀█ █▀▀ █▀▀   █▀ ▄▀█ █▀▄▀█ █▀█ █░█ █▀█ ▄▀█ █
 █▀░ █▀▄ ██▄ ██▄   ▄█ █▀█ █░▀░█ █▄█ █▄█ █▀▄ █▀█ █
 
