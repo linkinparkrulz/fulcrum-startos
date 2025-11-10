@@ -12,7 +12,7 @@ Install the system dependencies below to build this project by following the ins
 - [docker](https://docs.docker.com/get-docker)
 - [docker-buildx](https://docs.docker.com/buildx/working-with-buildx/)
 - [yq](https://mikefarah.gitbook.io/yq)
-- [deno](https://deno.land/)git remote add upstream https://github.com/whoever/whatever.git
+- [deno](https://deno.land/)
 - [make](https://www.gnu.org/software/make/)
 - [start-sdk](https://github.com/Start9Labs/start-os/tree/sdk/)
 

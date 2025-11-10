@@ -3,16 +3,15 @@ title: 'Fulcrum'
 version: 2.0.0
 release-notes: |
   Release v2.0.0 - September 2025 Release
-license: mit
+license: MIT
 wrapper-repo: 'https://github.com/linkinparkrulz/fulcrum-startos'
 upstream-repo: 'https://github.com/cculianu/Fulcrum'
 support-site: 'https://github.com/cculianu/Fulcrum/issues'
 marketing-site: 'https://github.com/cculianu/Fulcrum'
 build: ['make']
 description:
-  short: A fast & nimble SPV Server for BTC, BCH and LTC
-  long: |
-    A fast & nimble SPV server for Bitcoin, Bitcoin Cash and Litecoin created by Calin Culianu.
+  short: A fast and efficient Electrum server that connects to your Bitcoin node, allowing you to use your favorite wallets without relying on public servers.
+  long: Fulcrum is a high-performance Electrum server that indexes the Bitcoin blockchain from your own Bitcoin node. This allows you to connect hardware and software wallets to your own node, ensuring privacy and security. By acting as a bridge between your wallet and your node, Fulcrum provides a fast, reliable, and private way to manage your Bitcoin.
 assets:
   license: LICENSE
   icon: icon.png
@@ -132,6 +131,10 @@ migrations:
     '*':
       type: script
       args: ['to']
+hardware-requirements:
+  arch:
+    - x86_64
+    - aarch64
 # actions:
 #   reset-indexes:
 #     name: "Reset Index"
