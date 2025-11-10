@@ -18,8 +18,8 @@ export const getConfig: T.ExpectedExports.getConfig = compat.getConfig({
       id: 'type',
       name: 'Select Bitcoin Node',
       'variant-names': {
-        bitcoind: 'Bitcoin (Core or Knots)',
-        'bitcoind-testnet': 'Bitcoin Core (testnet4)',
+        bitcoind: 'Bitcoin (mainnet))',
+        'bitcoind-testnet': 'Bitcoin (testnet4)',
       },
       description: 'The Bitcoin node type you would like to use for Fulcrum',
     },
