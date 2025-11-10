@@ -22,14 +22,13 @@ announce = false
 {worker_threads}
 {db_mem}
 {db_max_open_files}
-{utxo_cache}
 #public_tcp_port = 50001
 #public_ssl_port = 50002
 #public_ws_port = 50003
 #public_wss_port = 50004
 #admin = 8000  # <-- 1.2.3.4:8000 notation also accepted here
 #donation = bitcoincash:qplw0d304x9fshz420lkvys2jxup38m9symky6k028
-#banner = /path/to/banner.txt
+banner = /data/banner.txt
 #stats = 8080  # <-- 1.2.3.4:8080 notation also accepted here
 #polltime = 2.0
 #db_max_open_files = 20

@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM debian:bullseye AS builder
+FROM --platform=$BUILDPLATFORM debian:bookworm AS builder
 
 ARG ARCH
 ARG TARGETARCH
@@ -24,24 +24,27 @@ RUN dpkg --add-architecture ${TARGETARCH} && \
 
 WORKDIR /src
 
-RUN git clone --branch v1.11.1 --depth 1 https://github.com/cculianu/Fulcrum.git . && \
-    git checkout v1.11.1
+RUN git clone --branch v2.0.0 --depth 1 https://github.com/cculianu/Fulcrum.git . && \
+    git checkout v2.0.0
 
-RUN export CC=${ARCH}-linux-gnu-gcc && \
+RUN export CXXFLAGS="-std=c++20" && \
+    export CC=${ARCH}-linux-gnu-gcc && \
     export CXX=${ARCH}-linux-gnu-g++ && \
     ${ARCH}-linux-gnu-qmake -makefile PREFIX=/usr \
         "QMAKE_CXXFLAGS_RELEASE -= -O3" \
+        "QMAKE_CXXFLAGS_RELEASE -= -std=gnu++2a" \
         "QMAKE_CXXFLAGS_RELEASE += -O1" \
+        "QMAKE_CXXFLAGS_RELEASE += -std=c++20" \
         "LIBS += -L/src/staticlibs/rocksdb/bin/linux/${ARCH}" \
         Fulcrum.pro \
         && \
     make -j1 install && \
     ${ARCH}-linux-gnu-strip Fulcrum
 
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends ca-certificates curl libbz2-1.0 libjemalloc2 libqt5network5 libzmq5 netcat openssl tini wget zlib1g && \
+    apt-get install -y --no-install-recommends ca-certificates curl libbz2-1.0 libjemalloc2 libqt5network5 libzmq5 netcat-openbsd openssl tini wget zlib1g && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
