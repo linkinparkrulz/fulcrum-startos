@@ -20,12 +20,19 @@ btc_url="http://$btc_host:$btc_port"
 
 user=$(yq '.bitcoind.username' /data/start9/config.yaml)
 pass=$(yq '.bitcoind.password' /data/start9/config.yaml)
-credentials="$user:$pass"
 rpc_method='{"jsonrpc": "1.0", "method": "getblockchaininfo"}'
 req_headers='content-type: text/plain;'
 
 # Get blockchain info from the bitcoin rpc
-if ! chain_info=$(curl -sS --user "$credentials" --data-binary "$rpc_method" -H "$req_headers" "$btc_url"/ 2>&1); then
+if ! chain_info=$(wget \
+    --quiet \
+    --method=POST \
+    --body-data="$rpc_method" \
+    --header="$req_headers" \
+    --http-user="$user" \
+    --http-password="$pass" \
+    --output-document=- \
+    "$btc_url"/ 2>&1); then
    echo "Error contacting Bitcoin RPC: $chain_info" >&2
    exit 61
 fi

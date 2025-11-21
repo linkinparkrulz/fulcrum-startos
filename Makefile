@@ -1,4 +1,3 @@
-FULCRUM_SRC := $(shell find ./Fulcrum/src)
 CONFIGURATOR_SRC := $(shell find ./configurator/src) configurator/Cargo.toml configurator/Cargo.lock
 PKG_ID := $(shell yq e ".id" < manifest.yaml)
 PKG_VERSION := $(shell yq e ".version" < manifest.yaml)
@@ -40,14 +39,14 @@ x86:
 	@rm -f docker-images/aarch64.tar
 	ARCH=x86_64 $(MAKE)
 
-docker-images/aarch64.tar: Dockerfile docker_entrypoint.sh configurator/target/aarch64-unknown-linux-musl/release/configurator $(FULCRUM_SRC)
+docker-images/aarch64.tar: Dockerfile docker_entrypoint.sh health-check/check-synced.sh health-check/check-electrum.sh configurator/target/aarch64-unknown-linux-musl/release/configurator
 ifeq ($(ARCH),x86_64)
 else
 	mkdir -p docker-images
 	docker buildx build --tag start9/$(PKG_ID)/main:$(PKG_VERSION) --build-arg ARCH=aarch64 --platform=linux/arm64 -o type=docker,dest=docker-images/aarch64.tar .
 endif
 
-docker-images/x86_64.tar: Dockerfile docker_entrypoint.sh configurator/target/x86_64-unknown-linux-musl/release/configurator $(FULCRUM_SRC)
+docker-images/x86_64.tar: Dockerfile docker_entrypoint.sh health-check/check-synced.sh health-check/check-electrum.sh configurator/target/x86_64-unknown-linux-musl/release/configurator
 ifeq ($(ARCH),aarch64)
 else
 	mkdir -p docker-images

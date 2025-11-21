@@ -84,8 +84,8 @@ exec > >(tee -a /data/fulcrum.log) 2>&1
 
 if [ -n "$FULCRUM_ARGS" ]; then
     echo "DEBUG: Executing: Fulcrum $FULCRUM_ARGS /data/fulcrum.conf"
-    exec tini -p SIGTERM -- Fulcrum $FULCRUM_ARGS /data/fulcrum.conf
+    exec tini -p SIGTERM -- Fulcrum $FULCRUM_ARGS --ts-format none /data/fulcrum.conf
 else
     echo "DEBUG: Executing: Fulcrum /data/fulcrum.conf"
-    exec tini -p SIGTERM -- Fulcrum /data/fulcrum.conf
+    exec tini -p SIGTERM -- Fulcrum --ts-format none /data/fulcrum.conf
 fi

@@ -1,13 +1,8 @@
 id: fulcrum
 title: 'Fulcrum'
-version: 2.0.0
+version: 2.1.0
 release-notes: |
-  ## Official Fulcrum v2.0.0 Release for StartOS
-
-  * Added a custom server banner option
-  * Updated the default settings to match upstream.
-  * Improved descriptions and instructions for a better user experience.
-  * Added warnings about resource usage during installation and startup.
+  Updated to Fulcrum v2.1.0 [Release notes](https://github.com/cculianu/Fulcrum/releases/tag/v2.1.0)
 license: MIT
 wrapper-repo: 'https://github.com/linkinparkrulz/fulcrum-startos'
 upstream-repo: 'https://github.com/cculianu/Fulcrum'
