@@ -72,7 +72,7 @@ alerts:
   start: 'WARNING: Fulcrum requires significant system resources: 1GB+ RAM during sync and 160GB+ for indexes. When combined with a Bitcoin node (~800GB), total storage requirements exceed 1TB. A 2TB drive is strongly recommended. Insufficient resources may cause system instability or failure.'
 dependencies:
   bitcoind:
-    version: '>=0.21.1.2 '
+    version: '>=28.0.0 <31.0.0'
     requirement:
       type: 'opt-out'
       how: Set "Bitcoin Core" to "Bitcoin Core"
@@ -84,7 +84,7 @@ dependencies:
         type: script
     requires-runtime-config: true
   bitcoind-testnet:
-    version: '>=0.21.1.2 '
+    version: '>=28.0.0 <31.0.0'
     requirement:
       type: 'opt-in'
       how: Set "Bitcoin Core" type to "Bitcoin Core (testnet)"
