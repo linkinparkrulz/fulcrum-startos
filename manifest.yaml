@@ -1,8 +1,9 @@
 id: fulcrum
 title: 'Fulcrum'
-version: 2.1.0
-release-notes: |
-  Updated to Fulcrum v2.1.0 [Release notes](https://github.com/cculianu/Fulcrum/releases/tag/v2.1.0)
+version: 2.1.0.1
+release-notes: |  
+  * Updated to Fulcrum v2.1.0 [Release notes](https://github.com/cculianu/Fulcrum/releases/tag/v2.1.0)
+  * Fix incorrect config requirement for bitcoind.
 license: MIT
 wrapper-repo: 'https://github.com/linkinparkrulz/fulcrum-startos'
 upstream-repo: 'https://github.com/cculianu/Fulcrum'
