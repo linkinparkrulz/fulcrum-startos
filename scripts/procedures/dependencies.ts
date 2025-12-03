@@ -12,9 +12,6 @@ const matchBitcoindConfig = shape({
     enable: boolean,
   }),
   advanced: shape({
-    peers: shape({
-      listen: boolean,
-    }),
     pruning: shape({
       mode: string,
     }),
@@ -38,23 +35,6 @@ const bitcoindChecks: Array<Check> = [
         return
       }
       config.rpc.enable = true
-    },
-  },
-  {
-    currentError(config) {
-      if (!matchBitcoindConfig.test(config)) {
-        return 'Config is not the correct shape'
-      }
-      if (!config.advanced.peers.listen) {
-        return 'Must have peer interface enabled'
-      }
-      return
-    },
-    fix(config) {
-      if (!matchBitcoindConfig.test(config)) {
-        return
-      }
-      config.advanced.peers.listen = true
     },
   },
   {
